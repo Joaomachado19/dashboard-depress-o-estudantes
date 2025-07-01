@@ -28,7 +28,7 @@ df["depression_label"] = df["depression"].replace({0: "Não", 1: "Sim"})
 pagina = st.sidebar.selectbox("Selecione a Página", [
     "Página 1: Depressão e Sono",
     "Página 2: CGPA e Estresse Financeiro",
-    "Página 3: Pressão no Trabalho",
+    "Página 3: Pressão no Trabalho e Suicídio",
     "Página 4: Interativos",
     "Tabela de Dados"
 ])
