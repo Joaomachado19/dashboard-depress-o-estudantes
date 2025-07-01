@@ -28,7 +28,7 @@ df["depression_label"] = df["depression"].replace({0: "Não", 1: "Sim"})
 pagina = st.sidebar.selectbox("Selecione a Página", [
     "Página 1: Depressão e Sono",
     "Página 2: CGPA e Estresse Financeiro",
-    "Página 3: Pressão no Trabalho e Suicídio",
+    "Página 3: Pressão no Trabalho",
     "Página 4: Interativos",
     "Tabela de Dados"
 ])
@@ -86,7 +86,7 @@ elif pagina == "Página 2: CGPA e Estresse Financeiro":
 
 # ---- Página 3 ----
 elif pagina == "Página 3: Pressão no Trabalho e Suicídio":
-    st.title("📊 Pressão no Trabalho e Pensamentos Suicidas")
+    st.title("📊 Pressão no Trabalho")
     col1, col2 = st.columns(2)
 
     with col1:
@@ -97,31 +97,25 @@ elif pagina == "Página 3: Pressão no Trabalho e Suicídio":
         ax.set_ylabel("Pressão no Trabalho")
         st.pyplot(fig)
 
-    with col2:
-        st.subheader("Pensamentos Suicidas por Gênero")
-        filtrar_depressao = st.checkbox("Mostrar apenas estudantes com depressão", key="suicidio")
-        df_plot = df[df["depression"] == 1] if filtrar_depressao else df
-        fig, ax = plt.subplots()
-        sns.countplot(data=df_plot, x="gender", hue="suicidal_thoughts", ax=ax)
-        ax.set_xlabel("Gênero")
-        ax.set_ylabel("Contagem")
-        ax.legend(title="Pensamentos Suicidas")
-        st.pyplot(fig)
-
 # ---- Página 4 ----
 elif pagina == "Página 4: Interativos":
     st.title("📈 Gráficos Interativos com Plotly")
     col1, col2 = st.columns(2)
 
     with col1:
-        st.subheader("CGPA vs Pressão Acadêmica (Interativo)")
-        fig = px.scatter(
+        st.subheader("Pensamentos Suicidas por Gênero e Depressão (Interativo)")
+        fig = px.bar(
             df,
-            x="academic_pressure",
-            y="cgpa",
-            color="depression_label",
-            hover_data=["gender", "academic_pressure", "cgpa"],
-            labels={"academic_pressure": "Pressão Acadêmica", "cgpa": "CGPA", "depression_label": "Depressão"},
+            x="gender",
+            color="suicidal_thoughts",
+            barmode="group",
+            facet_col="depression_label",
+            labels={
+                "gender": "Gênero",
+                "suicidal_thoughts": "Pensamentos Suicidas",
+                "depression_label": "Depressão"
+            },
+            title="Distribuição de Pensamentos Suicidas por Gênero (Com Depressão e Sem)"
         )
         st.plotly_chart(fig, use_container_width=True)
 
@@ -135,7 +129,10 @@ elif pagina == "Página 4: Interativos":
             box=True,
             points="all",
             hover_data=["gender", "work_pressure"],
-            labels={"depression_label": "Depressão", "work_pressure": "Pressão no Trabalho"},
+            labels={
+                "depression_label": "Depressão",
+                "work_pressure": "Pressão no Trabalho"
+            },
         )
         st.plotly_chart(fig, use_container_width=True)
 
